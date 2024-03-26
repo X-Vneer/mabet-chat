@@ -20,23 +20,26 @@ export const SocketProvider = ({ children }: SocketProvider) => {
   const [socket, setSocket] = useState<Socket | null>(null)
 
   useEffect(() => {
-    const controller = new AbortController()
-    const { signal } = controller
+    let cancel = false
     ;(async () => {
-      const response = await fetch("/api/socket", { signal })
-      // @ts-expect-error
-      const socket = io(undefined, {
-        path: "/api/socket.io",
-      })
-      socket.on("connect", () => {
-        console.log("connected")
-        // @ts-ignore
-        setSocket(socket)
-      })
-      socket.on("disconnect", () => console.log("disconnected"))
+      // await fetch("/api/socket", { signal })
+      // const response = await fetch("/api/socket", { signal })
+      // // @ts-expect-error
+      // const socket = io(undefined, {
+      //   path: "/api/socket.io",
+      // })
+      const socket = io("https://chat-app.mabet.com.sa:443")
+      if (!cancel) {
+        socket.on("connect", () => {
+          console.log("connected")
+          // @ts-ignore
+          setSocket(socket)
+        })
+        socket.on("disconnect", () => console.log("disconnected"))
+      }
     })()
     return () => {
-      controller.abort()
+      cancel = true
     }
   }, [])
   return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
