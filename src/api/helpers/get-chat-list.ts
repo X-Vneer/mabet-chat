@@ -1,6 +1,8 @@
 import ChatApi from "@/api"
 import axios from "axios"
 
+import { baseURL } from "./base-url"
+
 export const getChatList = async <T>({
   token,
   query,
@@ -12,7 +14,7 @@ export const getChatList = async <T>({
   pageParam: string | number
   showReportedChats?: boolean
 }) => {
-  let url = `https://xvneer-mabet-chat.netlify.app/api/chats-list?token=${token}&page=${pageParam}`
+  let url = `${baseURL}/api/chats-list?token=${token}&page=${pageParam}`
 
   if (query) url += `&query=${query}`
   if (showReportedChats) url += `&show_reported_chats=1`

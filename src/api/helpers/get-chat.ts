@@ -1,5 +1,7 @@
 import axios from "axios"
 
+import { baseURL } from "./base-url"
+
 export const getChat = async <T>({
   chatID,
   token,
@@ -8,7 +10,7 @@ export const getChat = async <T>({
   token: string
 }) => {
   const response = await axios.get<T>(
-    `https://xvneer-mabet-chat.netlify.app/api/chats/${chatID}?token=${token}`,
+    `${baseURL}/api/chats/${chatID}?token=${token}`,
   )
 
   return response.data

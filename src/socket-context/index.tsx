@@ -26,7 +26,7 @@ export const SocketProvider = ({ children }: SocketProvider) => {
       const response = await fetch("/api/socket", { signal })
       // @ts-expect-error
       const socket = io(undefined, {
-        path: "/api/socket_io",
+        path: "/api/socket.io",
       })
       socket.on("connect", () => {
         console.log("connected")

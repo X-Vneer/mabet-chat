@@ -29,8 +29,9 @@ export default function SocketHandler(
   }
 
   const io = new Server(res.socket.server, {
-    path: "/api/socket_io",
+    path: "/api/socket.io",
     addTrailingSlash: false,
+    cors: { origin: "*" },
   })
 
   io.on("connection", (socket) => {
