@@ -23,13 +23,11 @@ export const SocketProvider = ({ children }: SocketProvider) => {
     const controller = new AbortController()
     const { signal } = controller
     ;(async () => {
-      const response = await fetch(
-        "https://xvneer-mabet-chat.netlify.app/api/socket",
-        { signal },
-      )
-      console.log("🚀 ~ ; ~ response:", response)
-
-      const socket = io()
+      const response = await fetch("/api/socket", { signal })
+      // @ts-expect-error
+      const socket = io(undefined, {
+        path: "/api/socket_io",
+      })
       socket.on("connect", () => {
         console.log("connected")
         // @ts-ignore

@@ -28,7 +28,10 @@ export default function SocketHandler(
     return
   }
 
-  const io = new Server(res.socket.server)
+  const io = new Server(res.socket.server, {
+    path: "/api/socket_io",
+    addTrailingSlash: false,
+  })
 
   io.on("connection", (socket) => {
     socket.on("sendMessage", (message: Message, chatID, receiverIdentifier) => {
