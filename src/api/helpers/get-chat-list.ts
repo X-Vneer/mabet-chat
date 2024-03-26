@@ -12,7 +12,7 @@ export const getChatList = async <T>({
   pageParam: string | number
   showReportedChats?: boolean
 }) => {
-  let url = `https://xvneer-mabet-chat.netlify.app//api/chats-list?token=${token}&page=${pageParam}`
+  let url = `https://xvneer-mabet-chat.netlify.app/api/chats-list?token=${token}&page=${pageParam}`
 
   if (query) url += `&query=${query}`
   if (showReportedChats) url += `&show_reported_chats=1`
