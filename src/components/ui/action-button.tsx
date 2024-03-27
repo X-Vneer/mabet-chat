@@ -7,7 +7,7 @@ import { MoreHorizontal } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type Props = {
-  action: string
+  action: { type: string; payload: any }
 }
 
 const ActionButton = ({ action }: Props) => {
