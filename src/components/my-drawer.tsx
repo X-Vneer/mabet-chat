@@ -86,10 +86,12 @@ export function MyDrawer() {
   )
 
   return (
-    <Drawer open={!!drawer} onClose={() => setDrawerState("")}>
+    <Drawer
+      open={!!drawer}
+      onClose={() => setDrawerState({ type: "", payload: "" })}>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm pt-5">
-          {drawer === "filters" ? (
+          {drawer.type === "filters" ? (
             <div className="mb-4 space-y-2">
               {filtersItems.map((e, i) => {
                 return (
@@ -105,7 +107,7 @@ export function MyDrawer() {
               })}
             </div>
           ) : null}
-          {drawer === "chat-options" ? (
+          {drawer.type === "chat-options" ? (
             <div className="mb-4 space-y-2">
               {chatOptions.map((e, i) => {
                 return (
