@@ -15,6 +15,7 @@ export async function GET(req: Request) {
     })
     return Response.json(response.data)
   } catch (error) {
+    console.log("🚀 ~ GET ~ error:", error)
     if (error instanceof Error) {
       return new Response(error.message, { status: 500 })
     }
