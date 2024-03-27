@@ -27,7 +27,7 @@ export async function GET(req: Request, { params }: { params: { chatID: string }
   }
 }
 
-export async function POST(
+export async function DELETE(
   req: Request,
   { params }: { params: { chatID: string } },
 ) {
@@ -46,8 +46,8 @@ export async function POST(
 
     return Response.json(response.data)
   } catch (error) {
-    console.log("🚀 ~ error:", error)
     if (axios.isAxiosError(error)) {
+      console.log("🚀 ~ error:", error)
       return new Response(JSON.stringify(error.response?.data), {
         status: error.response?.status,
       })

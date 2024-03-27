@@ -55,27 +55,6 @@ const AdminChatItem = ({
   // Get QueryClient from the context
   const queryClient = useQueryClient()
 
-  const handleDeleteChat: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-    try {
-      const deleteChat = axios.post(`/api/chats/${uuid}?token=${token}`)
-
-      toast.promise(deleteChat, {
-        loading: "جاري حذف المحادثة",
-        success: (data) => {
-          return "تم حذف المحادثة"
-        },
-        error: "لم حذف المحادثة",
-      })
-      await deleteChat
-      await queryClient.refetchQueries({ queryKey: ["chat-lists"] })
-    } catch (error) {
-      toast.error("لم حذف المحادثة")
-    }
-    setChatOptions(false)
-  }
-
   const [isTyping, setIsTyping] = useState(false)
 
   const socket = useSocket()
@@ -91,16 +70,11 @@ const AdminChatItem = ({
     }
   }, [socket, uuid])
 
+  const pathName = usePathname()
+
   return (
     <div dir="rtl" className="relative" ref={ref}>
       <Link href={`/admin/${token}/chats/${uuid}?token=${token}`}>
-        <button
-          onClick={handleDeleteChat}
-          type="button"
-          className=" absolute bottom-[1px] left-0 top-[1px] flex aspect-square  flex-col items-center justify-center gap-2 bg-[#263238] text-white">
-          <span className="block text-[10px] font-bold">مسح المحادثة</span>
-          <Trash2 />
-        </button>
         <motion.div
           onDragEnd={(event, info) => hasBeenMovedEnough(info.offset.x)}
           drag="x"
@@ -109,6 +83,7 @@ const AdminChatItem = ({
           className={cn(
             " relative flex   gap-2 border-b border-t bg-white px-6 py-4 duration-200",
             chatOptions && "!translate-x-[5.8rem]",
+            pathName.includes(uuid) && " bg-gray-100",
           )}>
           <div className="flex gap-2">
             <div className="relative">

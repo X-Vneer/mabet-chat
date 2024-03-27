@@ -25,7 +25,6 @@ import UnitCard from "./unit-card"
 type Props = {
   chatID: string
   token: string
-  className?: string
 }
 
 export type Action =
@@ -64,7 +63,7 @@ function reducer(state: MessageType[], action: Action) {
   }
 }
 
-const AdminChatBody = ({ chatID, token, className }: Props) => {
+const AdminChatBody = ({ chatID, token }: Props) => {
   const { data, isFetching, isFetched, isLoading } = useQuery<AdminChatResponse>({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
@@ -127,7 +126,7 @@ const AdminChatBody = ({ chatID, token, className }: Props) => {
   if (isLoading) return <Loader />
   return (
     <>
-      <ScrollArea className={cn("relative h-[calc(100vh-250px)] pt-5", className)}>
+      <ScrollArea className={"relative !h-[calc(100vh-410px)] pt-5"}>
         {state.map((message, index) => {
           return (
             <React.Fragment key={`message_${message.id}`}>

@@ -41,15 +41,13 @@ export default async function Page({
               <UserState chatID={chatID} token={token} />
             </div>
           </div>
-          <ActionButton action={{ type: "chat-options", payload: "" }} />
+          <ActionButton
+            action={{ type: "admin-chat-options", payload: { chatID, token } }}
+          />
         </div>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <AdminChatBody
-          className="h-[calc(100vh-370px)]"
-          chatID={chatID}
-          token={token}
-        />
+        <AdminChatBody chatID={chatID} token={token} />
       </HydrationBoundary>
     </main>
   )

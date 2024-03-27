@@ -7,11 +7,9 @@ import { useAppStore } from "@/stores/app-store-provider"
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 
 import { AdminChatsListResponse } from "@/types/admin-chats-list-reponse"
-import { ChatListsResponse } from "@/types/chat-list-response"
 import { Message as MessageType } from "@/types/chat-response"
 
 import AdminChatItem from "./admin-chat-item"
-import ChatItem from "./chat-item"
 import { Label } from "./ui/label"
 import Loader from "./ui/loader"
 import { ScrollArea } from "./ui/scroll-area"
@@ -116,7 +114,7 @@ const AdminChatView = ({ token }: Props) => {
         />
         <Label htmlFor="show_reported_chats">عرض المحادثات المبلغ عليها </Label>
       </div>
-      <ScrollArea className="bg-stale-50 h-[calc(100vh-300px)]">
+      <ScrollArea className="bg-stale-50 h-[calc(100vh-350px)]">
         {data?.pages
           ?.flatMap((element) => element.data.chats)
           .map((chat, i) => (
