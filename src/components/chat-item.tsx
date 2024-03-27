@@ -4,10 +4,11 @@ import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSocket } from "@/socket-context"
+import { useAppStore } from "@/stores/app-store-provider"
 import { useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { motion } from "framer-motion"
-import { Trash2, User } from "lucide-react"
+import { Star, Trash2, User } from "lucide-react"
 import { toast } from "sonner"
 
 import { Chat } from "@/types/chat-list-response"
@@ -37,6 +38,12 @@ const ChatItem = ({
     if (value >= 120) {
       setChatOptions(true)
     }
+  }
+
+  const setDrawer = useAppStore((state) => state.setDrawer)
+
+  const handleShowReviews = () => {
+    setDrawer({ type: "show-reviews", payload: "" })
   }
 
   const ref = useRef<React.ElementRef<"div">>(null)
@@ -93,14 +100,21 @@ const ChatItem = ({
           <span className="block text-[10px] font-bold">مسح المحادثة</span>
           <Trash2 />
         </button>
+        <button
+          onClick={handleShowReviews}
+          type="button"
+          className=" absolute bottom-[1px] left-[5.6rem] top-[1px] flex aspect-square  flex-col items-center justify-center gap-2 bg-yellow-400 text-white">
+          <span className="block text-[10px] font-bold">تقيمات العميل</span>
+          <Star />
+        </button>
         <motion.div
           onDragEnd={(event, info) => hasBeenMovedEnough(info.offset.x)}
           drag="x"
-          dragElastic={0.3}
+          dragElastic={0.1}
           dragConstraints={{ left: 0, right: 0 }}
           className={cn(
             " relative flex   gap-2 border-b border-t bg-white px-6 py-4 duration-200",
-            chatOptions && "!translate-x-[5.8rem]",
+            chatOptions && "!translate-x-[11.2rem]",
           )}>
           <div className="relative">
             <Avatar className=" relative aspect-square h-14 w-14">

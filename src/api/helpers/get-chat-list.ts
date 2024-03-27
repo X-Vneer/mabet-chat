@@ -16,6 +16,7 @@ export const getChatList = async <T>({
 }) => {
   let url = `${baseURL}/api/chats-list?token=${token}&page=${pageParam}`
 
+  console.log("🚀 ~ url:", url)
   if (query) url += `&query=${query}`
   if (showReportedChats) url += `&show_reported_chats=1`
   const response = await axios.get<T>(url)
