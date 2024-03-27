@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils"
 import ChatInput from "./chat-input"
 import DateIndicator from "./date-indicator"
 import Message from "./message"
+import Loader from "./ui/loader"
 import { ScrollArea } from "./ui/scroll-area"
 import UnitCard from "./unit-card"
 
@@ -65,7 +66,7 @@ function reducer(state: MessageType[], action: Action) {
 }
 
 const ChatBody = ({ chatID, token, className, userIdentifier }: Props) => {
-  const { data, isFetching, isFetched } = useQuery<chatResponse>({
+  const { data, isFetching, isFetched, isLoading } = useQuery<chatResponse>({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
     refetchOnMount: "always",
@@ -127,6 +128,8 @@ const ChatBody = ({ chatID, token, className, userIdentifier }: Props) => {
     }
   }
 
+  if (isLoading)
+    return <Loader className="flex h-full w-full items-center justify-center" />
   return (
     <>
       <ScrollArea className={cn("relative h-[calc(100vh-250px)] pt-5", className)}>

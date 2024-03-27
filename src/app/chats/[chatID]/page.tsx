@@ -21,14 +21,18 @@ export default async function Page({
 }) {
   if (!searchParams.token) return notFound()
   const { token } = searchParams
-  const chatData = await getChat<chatResponse>({ chatID, token })
+
+  const [chatData, me] = await Promise.all([
+    getChat<chatResponse>({ chatID, token }),
+    getMe({ token: searchParams.token! }),
+  ])
+
   const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery({
     queryKey: [chatID],
     queryFn: async () => await getChat({ chatID, token }),
   })
-  const me = await getMe({ token: searchParams.token! })
 
   return (
     <main>
