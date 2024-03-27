@@ -33,7 +33,7 @@ export default function RootLayout({
           <AppStoreProvider>
             <SocketProvider>{children}</SocketProvider>
             <Toaster position="top-left" />
-            {/* <MyDrawer /> */}
+            <MyDrawer />
           </AppStoreProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </Providers>

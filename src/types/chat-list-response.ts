@@ -23,6 +23,8 @@ export type Chat = {
   last_message: string
   is_read: boolean
   unread_messages: number
+  user_guard: string
+  user_id: number
   chat_image: string
   created_at: Date
   last_message_at: string

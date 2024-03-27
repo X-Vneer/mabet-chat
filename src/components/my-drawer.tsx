@@ -1,10 +1,19 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { useAppStore } from "@/stores/app-store-provider"
+import { Avatar } from "@radix-ui/react-avatar"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
+import { User } from "lucide-react"
 import { useShallow } from "zustand/react/shallow"
 
-import { Drawer, DrawerContent } from "@/components/ui/drawer"
+import { Drawer, DrawerContent, DrawerHeader } from "@/components/ui/drawer"
+
+import { AvatarFallback, AvatarImage } from "./ui/avatar"
+import Loader from "./ui/loader"
 
 const filtersItems = [
   {
@@ -87,7 +96,7 @@ export function MyDrawer() {
 
   return (
     <Drawer
-      open={!!drawer}
+      open={!!drawer.type}
       onClose={() => setDrawerState({ type: "", payload: "" })}>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm pt-5">
@@ -123,8 +132,100 @@ export function MyDrawer() {
               })}
             </div>
           ) : null}
+          {drawer.type === "reviews" ? (
+            <Reviews
+              user_guard={drawer.payload.user_guard}
+              user_id={drawer.payload.user_id}
+            />
+          ) : null}
         </div>
       </DrawerContent>
     </Drawer>
+  )
+}
+
+function Reviews({ user_guard, user_id }: { user_guard: string; user_id: number }) {
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["reviews", user_guard, user_id],
+    queryFn: async () => {
+      const response = await axios.get<{
+        data: {
+          reviews: {
+            name: string
+            avatar: string
+            stars: number
+            comment: string
+            date: string
+          }[]
+        }
+      }>(`/api/user/${user_guard}/${user_id}/reviews?token=${token}`)
+      return response.data
+    },
+  })
+
+  if (isLoading)
+    return (
+      <div className=" h-[90vh] px-3 py-5">
+        <Loader className={"py-10"} />
+      </div>
+    )
+  if (error)
+    return (
+      <div className=" h-[90vh] px-3 py-5">
+        <p className="text-red-500">عذرا لم نتمكن من عرض تقييمات المستخدمين</p>
+      </div>
+    )
+  if (data && data.data?.reviews?.length === 0)
+    return (
+      <div className="h-[90vh] px-3 ">
+        <p>لا يوجد تقيميات</p>
+      </div>
+    )
+  return (
+    <div className="h-[90vh] ">
+      <DrawerHeader className="text-lg font-bold">تقييمات المستخدمين</DrawerHeader>
+      <div className=" space-y-3">
+        {data?.data?.reviews?.map((review, index) => {
+          return (
+            <div
+              key={index}
+              className={
+                " relative flex   gap-4 border-b border-t bg-white px-1 py-4 duration-200"
+              }>
+              <Avatar className=" relative aspect-square h-9 w-9 shrink-0">
+                <AvatarImage src={review.avatar} />
+                <AvatarFallback>
+                  <User />
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-[14px] font-bold leading-loose text-secondaryColor">
+                  {review.name}
+                </p>
+                <span
+                  className={
+                    "block  text-sm font-semibold leading-loose text-[#7B7B7B]"
+                  }>
+                  {review.comment}
+                </span>
+              </div>
+              <div className=" mr-auto">
+                <p>
+                  التقييم
+                  <span className="px-3 text-lg font-bold text-primary">
+                    {review.stars}
+                  </span>
+                </p>
+                <span className="block text-sm leading-loose text-[#494949] ">
+                  {review.date}
+                </span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }

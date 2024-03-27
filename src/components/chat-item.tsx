@@ -25,13 +25,10 @@ const ChatItem = ({
   is_read,
   unread_messages,
   chat_image,
-  created_at,
-  last_message_at,
   last_message_day,
-  chat_link,
-  access_token,
   is_user_online,
-  userIdentifier,
+  user_guard,
+  user_id,
 }: Chat & { token: string; userIdentifier: string }) => {
   const [chatOptions, setChatOptions] = useState(false)
   const hasBeenMovedEnough = (value: number) => {
@@ -42,8 +39,10 @@ const ChatItem = ({
 
   const setDrawer = useAppStore((state) => state.setDrawer)
 
-  const handleShowReviews = () => {
-    setDrawer({ type: "show-reviews", payload: "" })
+  const handleShowReviews: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setDrawer({ type: "reviews", payload: { user_guard, user_id } })
   }
 
   const ref = useRef<React.ElementRef<"div">>(null)
@@ -110,7 +109,7 @@ const ChatItem = ({
         <motion.div
           onDragEnd={(event, info) => hasBeenMovedEnough(info.offset.x)}
           drag="x"
-          dragElastic={0.1}
+          dragElastic={0.7}
           dragConstraints={{ left: 0, right: 0 }}
           className={cn(
             " relative flex   gap-2 border-b border-t bg-white px-6 py-4 duration-200",
